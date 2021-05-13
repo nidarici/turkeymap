@@ -1,0 +1,28 @@
+# import required modules
+import geopandas as gpd
+import geoplot as gplt
+import matplotlib.pyplot as plt
+
+# read geojson data
+cities = gpd.read_file("./datasets/turkey.json")
+
+print(cities)
+print(type(cities))
+
+# create a figure and a set of subplots
+fig, ax = plt.subplots(figsize=(15, 10))
+
+# iterate over the cities and annotate their names
+for idx, row in cities.iterrows():
+    centroid = row["geometry"].centroid  # find center of the city
+    print(centroid)
+    ax.annotate(row["name"], xy=(centroid.x, centroid.y))  # annotate name at the central point
+
+# add a title to the map
+ax.set_title("Turkey Map", fontdict={"fontsize": "25", "fontweight": "3"})
+
+# plotting the map with given data and options
+gplt.polyplot(cities, ax=ax, edgecolor='purple', facecolor='red', linewidth=.4)
+
+# show the figure
+fig.show()
